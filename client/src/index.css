@@ -3,6 +3,106 @@
     padding: 0;
     box-sizing: border-box;
 }
-.hide{
+body{
+    min-height:100vh;
+    background-color: aliceblue;
+}
+.container{
+    width: 100vw;
+    
+}
+.password-container form{
+display: flex;
+justify-content: center;
+    align-items: center;
+flex-direction: column;
+margin-top: 100px;
+}
+.password-container input{
+    padding: 10px;
+    border: 2px black solid;
+    border-radius: 8px;
+    max-width: 300px;
+    
+}
+.password-container input:focus{
+
+    background-color: lightcyan;
+}
+.btn{
+    margin-top: 30px;
+    border-radius:9px ;
+border: 3px red solid;
+}
+.btn:hover{
+    border: 3px blue solid;
+    background-color: white;
+}
+.admin-page{
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.product-container{
+    margin: 30px;
+    padding: 20px;
+    padding-inline:50px ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+img{
+    height: 300px;
+    width: 300px;
+}
+.admin-btn{
+    background-color: white;
+    border: 3px black solid;
+    border-radius: 10px;
+    padding:20px;
+    font-size: 1.5em;
+
+}
+.admin-btn:hover{
+    border: none;
+    background-color: black;
+    color :white;
+}
+.shadow-0{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    
+}
+.shadow-1{
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.form{
+    background-color:rgba(99, 99, 99, 0.09);
+    padding-bottom: 20px;
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 3px black solid;
+    border-radius: 10px;   
+}
+input{
+    width: 60vw;
+    height: 50px;
+    background-color: white;
+    border: none;
+    margin: 20px;
+    border: 1px black solid;
+    padding: 20px;
+}
+label{
+    background-color: black;
+    color: white;
+    padding: 25px;
+    cursor: pointer;
+}
+.img-input{
     display: none;
 }
