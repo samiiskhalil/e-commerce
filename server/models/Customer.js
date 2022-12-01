@@ -1,9 +1,8 @@
 const mongoose = require('mongoose')
 const customerSchema=new mongoose.Schema({
-    firstName:String,
-    lastName:String,
+    name:String,
     email:String,
-    location:String,
+    address:String,
     productsBoughtId:[{type:mongoose.Schema.Types.ObjectId,ref:'Product'}]
     
 })

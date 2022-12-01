@@ -17,6 +17,7 @@ const storage=multer.diskStorage({
 const upload=multer({storage:storage})
 const router=express.Router()
 //login admin
+
 router.post('/login',checkPassword,createToken,async(req,res)=>{
     try{
         // res.send
@@ -27,7 +28,7 @@ router.post('/login',checkPassword,createToken,async(req,res)=>{
     }
 })
 // get products
-router.get('/',verifyToken,async(req,res)=>{
+router.get('/',async(req,res)=>{
     try{
     const products=await Product.find()
 
@@ -37,13 +38,6 @@ router.get('/',verifyToken,async(req,res)=>{
         res.send(err.message)
     }
 
-})
-//get products images 
-router.get('/image',async (req,res,next)=>{
-    console.log('image')
-    // res.send('a')
-    res.status(200).sendFile(path.join(__dirname,'..','images','ds.jpg'))
-    res.status(200).sendFile(path.join(__dirname,'..','images','john.jpg'))
 })
 // create image
 router.post('/image',verifyToken,upload.single('image'),async (req,res)=>{
@@ -62,10 +56,13 @@ router.post('/',verifyToken,createProduct,async (req,res)=>{
         res.send(err.message)
     }
 })
+//delete product
 router.delete('/',verifyToken,async(req,res)=>{
     try{
-        const product=await Product.findById(req.body.product.id)
-            res.status(200).json({product:product})
+        console.log(req.headers['product-id'])
+        const product=await Product.findByIdAndRemove(req.headers['product-id'])
+        console.log('removed')    
+        res.status(200).json({product:product})
            }
     catch(err){
         res.send(err.message)

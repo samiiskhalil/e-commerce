@@ -1,15 +1,11 @@
 import axios from "axios"
 import Cookies from "js-cookie"
 import {useEffect, useState} from "react"
-import s from '../resources/sami.jpg'
 const Admin = () => {
   const [image,setImage]=useState({})
     const [form,setForm]=useState({})    
   const [product,setProduct]=useState({})
-  const [products,setProducts]=useState([{name:'asdasd',price:2},
-  {name:'asdas',price:1},
-  {name:'dklasdj',price:6}
-  ])
+  const [products,setProducts]=useState([])
   useEffect(()=>{
     axios.get('http://localhost:1000/api/admin',{
         headers:{
@@ -17,19 +13,9 @@ const Admin = () => {
 
         }
     })
-    .then(res=>{
-        console.log(res)
-        axios.get('http://localhost:1000/api/admin/image',{
-            headers:{
-                'authorization':`BEARER ${Cookies.get('token')}`
-
-            }
-        })
-        .then(res=>{
-            console.log(res)
-        })
-        .catch(err=>console.log(err))
-    }).catch(err=>console.log(err))
+.then(res=>{setProducts(res.data.products)
+})        
+// window.location.reload()
   },[])
   function handleImgUpload(e){
     let img=new File([e.target.files[0]],form.name,{
@@ -70,7 +56,9 @@ console.log(image)
            , 'encypte':'multipart/form-data'
         }
     })
-    .then(res=>console.log(res))
+    .then(res=>{
+        window.location.reload()
+    })
     .catch(err=>console.log(err))
 })}
     catch(err){
@@ -78,8 +66,7 @@ console.log(image)
     }
     //submit image
 }
-console.log(image.name)
-  return (
+return (
     <div className="container admin-page " >
         <form className="form" >
             <input onChange={handleChange} placeholder="name" type="text" name="name" id="name" />
@@ -97,9 +84,22 @@ console.log(image.name)
                 <h2> price: {product.price}</h2>
                 <h2>qunantity: 3</h2>
                 <p>lorem*10</p>
-                <img src={s} alt="img" />
+                <img src={`http://localhost:1000/${product.name}.jpg`} alt="img" />
                 <div className="actions-box">
-                    <button className="shadow-0 btn admin-btn" type="button">remove</button>
+                    <button className="shadow-0 btn admin-btn" onClick={(e)=>{
+                          axios.delete('http://localhost:1000/api/admin',{
+                            headers:{
+                                'authorization':`BEARER ${Cookies.get('token')}`
+                                ,'product-id':`${product._id}`
+                            }
+                        })
+                .then(res=>{
+                    console.log(res)
+                    window.location.reload()
+                })
+                .catch(err=>console.log(err))}
+                }
+                     type="button">remove</button>
                 </div>
             </div>)}
         </div>
