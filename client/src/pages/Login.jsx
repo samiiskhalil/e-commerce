@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 const Login = () => {
-  const [password,setPassword]=useState('')
+  let [password,setPassword]=useState('')
   const navigate=useNavigate()
   function handleChange(e){
     setPassword(e.target.value) 
@@ -20,7 +20,7 @@ const Login = () => {
   }
   
   return (
-<div className="password-container">
+      <div className="password-container">
         <form >
           
         <input onChange={handleChange} placeholder='type in admin password' required type="password" name="password" id="password" />

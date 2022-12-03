@@ -1,44 +1,43 @@
 import axios from "axios"
 import Cookies from "js-cookie"
 import {useEffect, useState} from "react"
+import { useNavigate } from "react-router"
 const Admin = () => {
   const [image,setImage]=useState({})
-    const [form,setForm]=useState({})    
-  const [product,setProduct]=useState({})
+  const [form,setForm]=useState({})    
   const [products,setProducts]=useState([])
+  const navigate=useNavigate()
   useEffect(()=>{
-    axios.get('http://localhost:1000/api/admin',{
-        headers:{
-            'authorization':`BEARER ${Cookies.get('token')}`
-
-        }
-    })
-.then(res=>{setProducts(res.data.products)
-})        
-// window.location.reload()
+    if(!Cookies.get('token'))
+    navigate('/')
+          axios.get('http://localhost:1000/api/admin',{
+          headers:{
+              'authorization':`BEARER ${Cookies.get('token')}`    
+            }
+        })
+        .then(res=>{setProducts(res.data.products)
+        })        
   },[])
   function handleImgUpload(e){
-    let img=new File([e.target.files[0]],form.name,{
+    let img=new File([e.target.files[0]],form.name,
+        {
         type:e.target.files[0].type,
         lastModified:e.target.files[0].lastModified
                              })
     setImage(img)
 }
-console.log(image)
   function handleChange(e){
 
     setForm(pre=>{
         return {
-            ...pre ,[e.target.name]:e.target.value
+           ... pre ,[e.target.name]:e.target.value
         }
     })
   }
-  async function handleSubmit(e){
+function handleSubmit(e){
     
-    try{
         //submit data
     e.preventDefault()
-        console.log(form)
             axios.post
     ('http://localhost:1000/api/admin',
     form,{
@@ -47,7 +46,6 @@ console.log(image)
         }
     })
 .then(res=>{
-
     axios.post('http://localhost:1000/api/admin/image',{image:image},{
         headers:{
             'image-name': `${image.name}`,
@@ -57,20 +55,15 @@ console.log(image)
         }
     })
     .then(res=>{
-        window.location.reload()
+        setProducts(res.data)
     })
     .catch(err=>console.log(err))
 })}
-    catch(err){
-        console.log(err)
-    }
-    //submit image
-}
 return (
     <div className="container admin-page " >
         <form className="form" >
-            <input onChange={handleChange} placeholder="name" type="text" name="name" id="name" />
-            <input onChange={handleChange} placeholder="price" type="number" name="price" id="price" />
+            <input onChange={handleChange} placeholder="name" type="text" name="name" id="name" />       <input onChange=
+            {handleChange} placeholder="price" type="number" name="price" id="price" />
             <input onChange={handleChange} placeholder="quantity" type="number" name="quantity" id="quantity" />
             <label htmlFor="image">add image
             <input onInputCapture={handleImgUpload} placeholder="image" className="img-input"  type='file' name="image" id="image" />
@@ -82,8 +75,7 @@ return (
                 <h1> name : {product.name}</h1>
                 
                 <h2> price: {product.price}</h2>
-                <h2>qunantity: 3</h2>
-                <p>lorem*10</p>
+                <h2>qunantity: {product.quantity}</h2>
                 <img src={`http://localhost:1000/${product.name}.jpg`} alt="img" />
                 <div className="actions-box">
                     <button className="shadow-0 btn admin-btn" onClick={(e)=>{
@@ -94,8 +86,10 @@ return (
                             }
                         })
                 .then(res=>{
-                    console.log(res)
-                    window.location.reload()
+                    console.log(res.data)
+                    setProducts(res.data)
+                    // setProducts(res.data)
+                
                 })
                 .catch(err=>console.log(err))}
                 }
@@ -103,6 +97,9 @@ return (
                 </div>
             </div>)}
         </div>
+                <button className="btn" onClick={e=>{Cookies.remove('token')
+                   navigate('/') 
+            }} >log out</button>
     </div>
 
     )

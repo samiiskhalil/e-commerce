@@ -19,13 +19,17 @@ async function checkPassword(req,res,next){
 }
 //verify token
 async function verifyToken(req,res,next){
-    const token = req.headers.authorization.split(' ')[1]
-     jwt.verify(token,process.env.JWT_SECRET,(data,err)=>{
-    if(err)
-    console.log(err)    
-    // res.status(403).json({msg:'you are not admin !'})
-      req.token=data
+  if(!req.headers.authorization)
+        return res.send('no token')
+    const tokenBearer=req.headers.authorization.split(' ')
+    if(!tokenBearer[1])
+    return res.send('no token')
+    const token=tokenBearer[1]
+    await jwt.verify(token,process.env.JWT_SECRET,(err,data)=>{
+        if(err)
+        return res.send(err)
+        req.token=data
+        return next()
     })
-    return next()
 }
 module.exports={createToken,checkPassword,verifyToken}

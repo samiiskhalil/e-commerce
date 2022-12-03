@@ -3,7 +3,16 @@ const customerSchema=new mongoose.Schema({
     name:String,
     email:String,
     address:String,
-    productsBoughtId:[{type:mongoose.Schema.Types.ObjectId,ref:'Product'}]
+    invoice:[{
+        productId:{type:mongoose.Schema.Types.ObjectId,
+        ref:'Product'},
+        count:Number
+        
+}]
+
+        
+        
+    
     
 })
 module.exports=mongoose.model('Customer',customerSchema)

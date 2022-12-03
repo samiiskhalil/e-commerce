@@ -5,6 +5,7 @@ const {createProduct}=require('../middleware/middleware.js')
 const fs = require('fs');
 const {checkPassword,createToken,verifyToken} = require('../middleware/authentication.js');
 const path=require('path')
+const customerModel=require('../models/Customer.js')
 const multer = require('multer');
 const storage=multer.diskStorage({
     destination:(req,file,cb)=>{
@@ -41,13 +42,15 @@ router.get('/',async(req,res)=>{
 })
 // create image
 router.post('/image',verifyToken,upload.single('image'),async (req,res)=>{
-res.status(201).json({msg:'image created'})
+    const products=await Product.find()
+    res.status(201).json(products)
 
 })
 //create product
-router.post('/',verifyToken,createProduct,async (req,res)=>{
+router.post('/',createProduct,async (req,res)=>{
     try{
-        res.status(201).send('adas')
+        const products=await Product.find()
+        res.status(201).json(products)
         // const product=await Product.create(req.body.product)
         // console.log(product)
         // res.status(201).json({product:product})
@@ -57,15 +60,36 @@ router.post('/',verifyToken,createProduct,async (req,res)=>{
     }
 })
 //delete product
+router.get('/a',verifyToken,async(req,res)=>{
+    res.send(req.token)
+})
 router.delete('/',verifyToken,async(req,res)=>{
     try{
-        console.log(req.headers['product-id'])
+        if(req.token)
+        console.log('aaaa')
+
         const product=await Product.findByIdAndRemove(req.headers['product-id'])
         console.log('removed')    
-        res.status(200).json({product:product})
+        const products=await Product.find()
+        res.status(200).json(products)
            }
     catch(err){
         res.send(err.message)
     }
+})
+// get customers orders
+router.get('/orders',verifyToken,async (req,res)=>{
+try{
+    const customers=await customerModel.find()
+    let a=[]
+    for(let i=0;i<customers.length;i++){
+ let s= await   customers[i].populate('invoice.productId')
+    a.push(s)}
+console.log(a[0].invoice) 
+    res.status(200).json(a)    
+}
+catch(err){
+    res.send(err)
+}
 })
 module.exports=router
